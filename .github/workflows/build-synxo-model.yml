@@ -1,0 +1,37 @@
+name: Build SYNXO Nano Model
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: model/requirements.txt
+
+      - name: Install model dependencies
+        run: pip install -r model/requirements.txt
+
+      - name: Train SYNXO
+        run: python model/train.py
+
+      - name: Evaluate SYNXO
+        run: python model/evaluate.py
+
+      - name: Upload trained model and evaluation
+        uses: actions/upload-artifact@v4
+        with:
+          name: synxo-nano-model
+          path: |
+            artifacts/synxo-nano
+            model/evaluation.json
+          if-no-files-found: error
