@@ -49,7 +49,7 @@ trainer = SFTTrainer(
     train_dataset=train,
     eval_dataset=valid,
     peft_config=peft,
-    processing_class=tokenizer,
+    tokenizer=tokenizer,
     max_seq_length=cfg["max_seq_length"],
 )
 
